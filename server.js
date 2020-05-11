@@ -72,6 +72,7 @@ app.use('/api', function(req, res, next) {
 });
 
 function controllaToken(req, res, next) {
+
     if (req.originalUrl == '/api/loginA' || req.originalUrl == '/api/loginU' || req.originalUrl == '/api/insertAmministratore'|| req.originalUrl == '/api/insertCondomino' || req.originalUrl == '/api/lastIdCondominio'|| req.originalUrl == '/api/insertCondominio' || req.originalUrl == '/api/thisNameC' || req.originalUrl == '/api/esistenzaCondominio' || req.originalUrl == '/api/updateUtente' || req.originalUrl == '/api/ricercaIdCondominio'/*|| req.originalUrl == '/api/elencoReparti' || req.originalUrl == '/api/elencoMediciReparto' || req.originalUrl == '/api/lastIdVisita' || req.originalUrl == '/api/insertVisita'*/)
         {
         next();}
@@ -138,6 +139,7 @@ app.post('/api/thisName', function (req, res, next) {
         }
     });
 });
+
 
 app.post('/api/thisNameC', function (req, res, next) {
     MONGO_CLIENT.connect(STRING_CONNECT, PARAMETERS, function (err, client) {
@@ -234,7 +236,6 @@ app.post('/api/esistenzaCondominio', function(req, res, next) {
         }
     });
 });
-
 
 app.post('/api/lastIdCondominio', function (req, res, next) {
     MONGO_CLIENT.connect(STRING_CONNECT, PARAMETERS, function (err, client) {
@@ -395,6 +396,7 @@ app.post('/api/insertCondomino', function (req, res, next) {
                 "password":req.body.passwordC,
                 "telefono":req.body.telefonoC,
                 "idCondominio":null
+
             };
 
             collection.insertOne(par, function (err, data) {
@@ -444,6 +446,7 @@ app.post('/api/insertCondominio', function (req, res, next) {
         }
     });
 });
+
 
 
 
@@ -511,6 +514,7 @@ app.post('/api/updateUtente', function (req, res, next) {
         }
     });
 });*/
+
 
 function createToken(obj) {
    let token = jwt.sign({

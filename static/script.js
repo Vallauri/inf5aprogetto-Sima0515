@@ -14,7 +14,7 @@ $(document).ready(function () {
                 }
             });
             loginRQ.done(function (data) {
-                sessionStorage.setItem("codiceFiscale", $("#txtCodFA").val());                
+                sessionStorage.setItem("codiceFiscale", $("#txtCodFA").val());    
                 window.location.href = "AreaProtetta/index.html";
             });
         
@@ -35,8 +35,10 @@ $(document).ready(function () {
             }
         });
         loginRQ.done(function (data) {
-            sessionStorage.setItem("codiceFiscale", $("#txtCodFU").val());                
+            sessionStorage.setItem("codiceFiscale", $("#txtCodFU").val());             
             window.location.href = "AreaProtetta/indexCondomini.html";
+
+            
         });
 
         
