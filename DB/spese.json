@@ -1,0 +1,10 @@
+[
+	{ 
+		"idSpesa": 0,
+		"idCondominio": 0, 
+		"Tipologia": "Manutenzione",
+		"Descrizione": "Ristrutturazione Facciata",
+		"Importo": 15,
+		"data": "15/10/2019"
+	}
+]

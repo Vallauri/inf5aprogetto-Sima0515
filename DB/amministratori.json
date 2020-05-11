@@ -1,0 +1,11 @@
+[
+	{ 
+		"codiceFiscale": "FRRPRI01B08B791N",
+		"nome": "Piero", 
+		"cognome": "Ferrero",
+		"DataNascita": "08/02/2001",
+		"password": "0000",
+		"telefono":"0118795864"
+	}
+]
+
