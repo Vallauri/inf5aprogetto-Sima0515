@@ -1,0 +1,3 @@
+mongoimport --db housing --collection amministratori --file "C:\Users\Piero Ferrero\Desktop\Progetto fine anno\Modifiche\DB\amministratori.json" --jsonArray
+mongoimport --db housing --collection condomini --file "C:\Users\Piero Ferrero\Desktop\Progetto fine anno\Modifiche\DB\condomini.json" --jsonArray
+mongoimport --db housing --collection condominio --file "C:\Users\Piero Ferrero\Desktop\Progetto fine anno\Modifiche\DB\condominio.json" --jsonArray

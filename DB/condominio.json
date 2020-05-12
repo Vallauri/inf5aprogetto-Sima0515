@@ -1,0 +1,11 @@
+[
+	{ 
+		"idCondominio": 0,
+		"idAmministratore": "FRRPRI01B08B791N", 
+		"nomeCondominio": "Melandri",
+		"CodiceCatastale": "0215420",
+		"CodiceAccesso": "1234",
+		"Indirizzo":"Via Cuneo",
+		"numeroCivico":"18"
+	}
+]
