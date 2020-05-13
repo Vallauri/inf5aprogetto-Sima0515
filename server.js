@@ -73,6 +73,7 @@ app.use('/api', function(req, res, next) {
 
 function controllaToken(req, res, next) {
     if (req.originalUrl == '/api/loginA' || req.originalUrl == '/api/loginU' || req.originalUrl == '/api/insertAmministratore'|| req.originalUrl == '/api/insertCondomino' || req.originalUrl == '/api/lastIdCondominio'|| req.originalUrl == '/api/insertCondominio' || req.originalUrl == '/api/thisNameC' || req.originalUrl == '/api/esistenzaCondominio' || req.originalUrl == '/api/updateUtente' || req.originalUrl == '/api/ricercaIdCondominio' || req.originalUrl == '/api/logout' || req.originalUrl == '/api/thisNameCondominio' /*|| req.originalUrl == '/api/lastIdVisita' || req.originalUrl == '/api/insertVisita'*/)
+
         {
         next();}
     else {
