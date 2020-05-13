@@ -1,0 +1,12 @@
+[
+	{ 
+		"idSpesa": 0,
+		"idCondominio": 0, 
+		"Tipologia": "Manutenzione",
+		"Descrizione": "Ristrutturazione Facciata",
+		"Importo": 15,
+		"giorno": "15",
+		"mese":"02",
+		"Anno":"2020"
+	}
+]
