@@ -1,0 +1,10 @@
+[
+	{ 
+		"idRichiesta": 0,
+		"idCondominio": 1, 
+		"codiceFiscaleUtente": "3",
+		"tipologiaRichiesta": "Domanda",
+		"Richiesta": "Posso avere pizza gratis?",
+		"tipologiaRicevente":"A"
+	}
+]

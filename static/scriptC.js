@@ -59,7 +59,6 @@ $(document).ready(function () {
                     alert("idCondominio: " + data[0].idCondominio);
                     let idCond=data[0].idCondominio;
                     let update = inviaRichiesta("/api/updateUtente", "POST", param);
-
                     
                     update.done(function(data){
                     if (data.ris.ok && data.ris.modifiedCount) {
@@ -96,6 +95,8 @@ $(document).ready(function () {
         alert("Completa tutti i campi");  
 
     });
+
+    
     
 
     

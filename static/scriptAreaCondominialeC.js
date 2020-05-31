@@ -1,6 +1,15 @@
 "option strict"
 $(document).ready(function () {
 
+    let data = new Date()
+
+    let giorno = data.getDate();
+    let mese = data.getMonth() + 1;
+    let anno = data.getFullYear();
+    $("#giorno").text(giorno + "-");
+    $("#mese").text(mese + "-");
+    $("#anno").text(anno);
+
     let idCond = sessionStorage.getItem("idCond");
     let cFiscale = sessionStorage.getItem("codiceFiscale");
     alert("idCondominio: " + idCond + " Codice Fiscale: " + cFiscale);
@@ -51,14 +60,97 @@ $(document).ready(function () {
             });
     });
 
-    let data = new Date()
+    $("#btnRichiestaA").on("click", function(){
+        if($("#txtTipologiaA").val() != "" && $("#txtMessaggioA").val() != "")
+        {
+            /**/
+            let idRichiesta = inviaRichiesta("/api/lastIdRichiesta", "POST", {});
+            idRichiesta.done(function(data){
+                let param = {
+                    codiceFiscale: cFiscale,
+                    idCondominio: idCond,
+                    tipologiaRichiesta: $("#txtTipologiaA").val(),
+                    Richiesta: $("#txtMessaggioA").val(),
+                    tipologiaRichiedente:"A",
+                    _idRichiesta: parseInt(data[0].idRichiesta + 1)
+                
+                }
+                
+                let insert = inviaRichiesta("/api/insertRichiesta", "POST", param);
+                
+                insert.done(function(data){
+                if (data.ris.ok && data.ris.modifiedCount) {
+                    alert("Inserito");
+                    $("#txtTipologiaA").val("");
+                    $("#txtCodiceCatastale").val("");
+                    $("#txtMessaggioA").val("");
+                }
+                else{
+                    alert("Errore");
+                }
+            });
 
-    let giorno = data.getDate();
-    let mese = data.getMonth() + 1;
-    let anno = data.getFullYear();
-    $("#giorno").text(giorno + "-");
-    $("#mese").text(mese + "-");
-    $("#anno").text(anno);
+            insert.fail(function (jqXHR, test_status, str_error) {
+                    error(jqXHR, test_status, str_error);
+                });
+            });
+            idRichiesta.fail(function (jqXHR, test_status, str_error) {
+                error(jqXHR, test_status, str_error);
+        
+            });  
+        }    
+        else
+        alert("Completa tutti i campi");  
+
+    });
+
+    $("#btnRichiestaC").on("click", function(){
+        if($("#txtTipologiaC").val() != "" && $("#txtMessaggioC").val() != "")
+        {
+            /**/
+            let idRichiesta = inviaRichiesta("/api/lastIdRichiesta", "POST", {});
+            idRichiesta.done(function(data){
+                let param = {
+                    codiceFiscale: cFiscale,
+                    idCondominio: idCond,
+                    tipologiaRichiesta: $("#txtTipologiaC").val(),
+                    Richiesta: $("#txtMessaggioC").val(),
+                    tipologiaRichiedente:"C",
+                    _idRichiesta: parseInt(data[0].idRichiesta + 1)
+                
+                }
+                
+                let insert = inviaRichiesta("/api/insertRichiesta", "POST", param);
+                
+                insert.done(function(data){
+                if (data.ris.ok && data.ris.modifiedCount) {
+                    alert("Inserito");
+                    $("#txtTipologiaA").val("");
+                    $("#txtCodiceCatastale").val("");
+                    $("#txtMessaggioA").val("");
+                }
+                else{
+                    alert("Errore");
+                }
+            });
+
+            insert.fail(function (jqXHR, test_status, str_error) {
+                    error(jqXHR, test_status, str_error);
+                });
+            });
+            idRichiesta.fail(function (jqXHR, test_status, str_error) {
+                error(jqXHR, test_status, str_error);
+        
+            });  
+        }    
+        else
+        alert("Completa tutti i campi");  
+
+    });
+
+
+
+    
     
         
 });

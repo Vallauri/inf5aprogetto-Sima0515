@@ -72,8 +72,7 @@ app.use('/api', function(req, res, next) {
 });
 
 function controllaToken(req, res, next) {
-    if (req.originalUrl == '/api/loginA' || req.originalUrl == '/api/loginU' || req.originalUrl == '/api/insertAmministratore'|| req.originalUrl == '/api/insertCondomino' || req.originalUrl == '/api/lastIdCondominio'|| req.originalUrl == '/api/insertCondominio' || req.originalUrl == '/api/thisNameC' || req.originalUrl == '/api/esistenzaCondominio' || req.originalUrl == '/api/updateUtente' || req.originalUrl == '/api/ricercaIdCondominio' || req.originalUrl == '/api/logout' || req.originalUrl == '/api/thisNameCondominio' /*|| req.originalUrl == '/api/lastIdVisita' || req.originalUrl == '/api/insertVisita'*/)
-
+    if (req.originalUrl == '/api/loginA' || req.originalUrl == '/api/loginU' || req.originalUrl == '/api/insertAmministratore'|| req.originalUrl == '/api/insertCondomino' || req.originalUrl == '/api/lastIdCondominio'|| req.originalUrl == '/api/insertCondominio' || req.originalUrl == '/api/thisNameC' || req.originalUrl == '/api/esistenzaCondominio' || req.originalUrl == '/api/updateUtente' || req.originalUrl == '/api/ricercaIdCondominio' || req.originalUrl == '/api/logout' || req.originalUrl == '/api/thisNameCondominio' || req.originalUrl == '/api/lastIdRichiesta' || req.originalUrl == '/api/insertRichiesta')
         {
         next();}
     else {
@@ -215,6 +214,7 @@ app.post('/api/ricercaIdCondominio', function (req, res, next) {
     });
 });
 
+
 app.post('/api/esistenzaCondominio', function(req, res, next) {
 
     MONGO_CLIENT.connect(STRING_CONNECT, PARAMETERS, function(err, client) {
@@ -270,6 +270,29 @@ app.post('/api/lastIdCondominio', function (req, res, next) {
             let db = client.db('housing');
             let collection = db.collection('condominio');
             collection.find({}).project({ idCondominio: 1 }).sort({ idCondominio: -1 }).limit(1).toArray(function (err, data) {
+                if (err) {
+                    error(req, res, err, JSON.stringify(new ERRORS.QUERY_EXECUTE({})));
+                    console.log("No ID");
+                }
+                else{
+                    res.send(JSON.stringify(data));
+                    console.log("Id trovato");
+                    console.log(data);
+                }
+                client.close();
+            });
+        }
+    });
+});
+
+app.post('/api/lastIdRichiesta', function (req, res, next) {
+    MONGO_CLIENT.connect(STRING_CONNECT, PARAMETERS, function (err, client) {
+        if (err)
+            error(req, res, err, JSON.stringify(new ERRORS.DB_CONNECTION({})));
+        else {
+            let db = client.db('housing');
+            let collection = db.collection('richiesteC');
+            collection.find({}).project({ idRichiesta: 1 }).sort({ idCondominio: -1 }).limit(1).toArray(function (err, data) {
                 if (err) {
                     error(req, res, err, JSON.stringify(new ERRORS.QUERY_EXECUTE({})));
                     console.log("No ID");
@@ -398,6 +421,38 @@ app.post('/api/insertAmministratore', function (req, res, next) {
                 else {
                     res.send(JSON.stringify(data));
                     console.log("Ho inserito l'amministratore");
+                }
+                client.close();
+            });
+        }
+    });
+});
+
+app.post('/api/insertRichiesta', function (req, res, next) {
+    console.log("Entro in inserimento");
+    MONGO_CLIENT.connect(STRING_CONNECT, PARAMETERS, function (err, client) {
+        if (err)
+            error(req, res, err, JSON.stringify(new ERRORS.DB_CONNECTION({})));
+        else {
+            let db = client.db('housing');
+            let collection = db.collection('richiesteC');
+            let par = {
+                "idRichiesta": req.body._idRichiesta,
+                "idCondominio":req.body.idCondominio,
+                "codiceFiscaleUtente":req.body.codiceFiscale,
+                "tipologiaRichiesta":req.body.tipologiaRichiesta,
+                "Richiesta":req.body.Richiesta,
+                "tipologiaRicevente":req.body.tipologiaRichiedente
+            };
+
+            collection.insertOne(par, function (err, data) {
+                if (err) {
+                    error(req, res, err, JSON.stringify(new ERRORS.QUERY_EXECUTE({})));
+                    console.log("Errore nella insertOne");
+                }
+                else {
+                    res.send(JSON.stringify(data));
+                    console.log("Ho inserito la richiesta");
                 }
                 client.close();
             });
