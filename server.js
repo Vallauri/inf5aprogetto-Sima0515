@@ -72,7 +72,12 @@ app.use('/api', function(req, res, next) {
 });
 
 function controllaToken(req, res, next) {
-    if (req.originalUrl == '/api/loginA' || req.originalUrl == '/api/loginU' || req.originalUrl == '/api/insertAmministratore'|| req.originalUrl == '/api/insertCondomino' || req.originalUrl == '/api/lastIdCondominio'|| req.originalUrl == '/api/insertCondominio' || req.originalUrl == '/api/thisNameC' || req.originalUrl == '/api/esistenzaCondominio' || req.originalUrl == '/api/updateUtente' || req.originalUrl == '/api/ricercaIdCondominio' || req.originalUrl == '/api/logout' || req.originalUrl == '/api/thisNameCondominio' || req.originalUrl == '/api/lastIdRichiesta' || req.originalUrl == '/api/insertRichiesta')
+    if (req.originalUrl == '/api/loginA' || req.originalUrl == '/api/loginU' || req.originalUrl == '/api/insertAmministratore'|| 
+    req.originalUrl == '/api/insertCondomino' || req.originalUrl == '/api/lastIdCondominio'|| req.originalUrl == '/api/insertCondominio' ||
+    req.originalUrl == '/api/thisNameC' || req.originalUrl == '/api/esistenzaCondominio' || req.originalUrl == '/api/updateUtente' || 
+    req.originalUrl == '/api/ricercaIdCondominio' || req.originalUrl == '/api/logout' || req.originalUrl == '/api/thisNameCondominio' || 
+    req.originalUrl == '/api/lastIdRichiesta' || req.originalUrl == '/api/insertRichiesta' || req.originalUrl == '/api/lastIdSegnalazione' ||
+    req.originalUrl == '/api/insertSegnalazione' || req.originalUrl == '/api/elencoProprieta')
         {
         next();}
     else {
@@ -214,6 +219,27 @@ app.post('/api/ricercaIdCondominio', function (req, res, next) {
     });
 });
 
+app.post("/api/elencoProprieta", function (req, res, next) {
+    MONGO_CLIENT.connect(STRING_CONNECT, PARAMETERS, function (err, client) {
+        if (err)
+            error(req, res, err, JSON.stringify(new ERRORS.DB_CONNECTION({})));
+        else {
+            let db = client.db('housing');
+            let collection = db.collection('condominio');
+			// nella find metto il valore del reparto passato dal client
+            collection.find({idAmministratore:req.body.codiceFiscale}).toArray(function (err, data) {
+                if (err){
+                    error(req, res, err, JSON.stringify(new ERRORS.QUERY_EXECUTE({})));
+                    console.log("NOn ce la fa");}
+                else{
+                    res.send(JSON.stringify({ "ris": data }));
+                    console.log("Ce l fa");}
+                client.close();
+            });
+        }
+    });
+});
+
 
 app.post('/api/esistenzaCondominio', function(req, res, next) {
 
@@ -292,7 +318,7 @@ app.post('/api/lastIdRichiesta', function (req, res, next) {
         else {
             let db = client.db('housing');
             let collection = db.collection('richiesteC');
-            collection.find({}).project({ idRichiesta: 1 }).sort({ idCondominio: -1 }).limit(1).toArray(function (err, data) {
+            collection.find({}).project({ idRichiesta: 1 }).sort({ idRichiesta: -1 }).limit(1).toArray(function (err, data) {
                 if (err) {
                     error(req, res, err, JSON.stringify(new ERRORS.QUERY_EXECUTE({})));
                     console.log("No ID");
@@ -302,6 +328,30 @@ app.post('/api/lastIdRichiesta', function (req, res, next) {
                     console.log("Id trovato");
                     console.log(data);
                 }
+                client.close();
+            });
+        }
+    });
+});
+
+app.post('/api/lastIdSegnalazione', function (req, res, next) {
+    MONGO_CLIENT.connect(STRING_CONNECT, PARAMETERS, function (err, client) {
+        if (err)
+            error(req, res, err, JSON.stringify(new ERRORS.DB_CONNECTION({})));
+        else {
+            let db = client.db('housing');
+            let collection = db.collection('richiesteA');
+            collection.find({}).project({ idSegnalazione: 1 }).sort({ idSegnalazione: -1 }).limit(1).toArray(function (err, data) {
+                if (err) {
+                    error(req, res, err, JSON.stringify(new ERRORS.QUERY_EXECUTE({})));
+                    console.log("No ID");
+                }
+                else{
+                    res.send(JSON.stringify(data));
+                    console.log("Id trovato");
+                    console.log(data + "Uesha");
+                }
+                console.log(data + "Id Richiesta");
                 client.close();
             });
         }
@@ -443,6 +493,37 @@ app.post('/api/insertRichiesta', function (req, res, next) {
                 "tipologiaRichiesta":req.body.tipologiaRichiesta,
                 "Richiesta":req.body.Richiesta,
                 "tipologiaRicevente":req.body.tipologiaRichiedente
+            };
+
+            collection.insertOne(par, function (err, data) {
+                if (err) {
+                    error(req, res, err, JSON.stringify(new ERRORS.QUERY_EXECUTE({})));
+                    console.log("Errore nella insertOne");
+                }
+                else {
+                    res.send(JSON.stringify(data));
+                    console.log("Ho inserito la richiesta");
+                }
+                client.close();
+            });
+        }
+    });
+});
+
+app.post('/api/insertSegnalazione', function (req, res, next) {
+    console.log("Entro in inserimento");
+    MONGO_CLIENT.connect(STRING_CONNECT, PARAMETERS, function (err, client) {
+        if (err)
+            error(req, res, err, JSON.stringify(new ERRORS.DB_CONNECTION({})));
+        else {
+            let db = client.db('housing');
+            let collection = db.collection('richiesteA');
+            let par = {
+                "idSegnalazione": req.body._idSegnalazione,
+                "idCondominio":req.body.idCondominio,
+                "codiceFiscaleUtente":req.body.codiceFiscale,
+                "tipologiaSegnalazione":req.body.tipologiaSegnalazione,
+                "Segnalazione":req.body.Segnalazione
             };
 
             collection.insertOne(par, function (err, data) {

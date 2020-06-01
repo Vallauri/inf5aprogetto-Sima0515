@@ -1,6 +1,15 @@
 "option strict"
 $(document).ready(function () {
 
+    let data = new Date()
+
+    let giorno = data.getDate();
+    let mese = data.getMonth() + 1;
+    let anno = data.getFullYear();
+    $("#giorno").text(giorno + "-");
+    $("#mese").text(mese + "-");
+    $("#anno").text(anno);
+    
     let idCond = sessionStorage.getItem("idCond");
     let cFiscale = sessionStorage.getItem("codiceFiscale");
     alert("idCondominio: " + idCond + " Codice Fiscale: " + cFiscale);
@@ -9,7 +18,7 @@ $(document).ready(function () {
         codiceFiscale: cFiscale
     }
     console.log(parCod);
-    let name = inviaRichiesta("/api/thisNameC", "POST", parCod);
+    let name = inviaRichiesta("/api/thisName", "POST", parCod);
     
     
 
@@ -51,14 +60,51 @@ $(document).ready(function () {
             });
     });
 
-    let data = new Date()
+    $("#btnSegnalazioni").on("click", function(){
+        if($("#txtTipologiaA").val() != "" && $("#txtMessaggioA").val() != "")
+        {
+            alert("parto");
+            /**/
+            let idSegnalazione = inviaRichiesta("/api/lastIdSegnalazione", "POST", {});
+            alert(idSegnalazione);
+            idSegnalazione.done(function(data){
+                let param = {
+                    codiceFiscale: cFiscale,
+                    idCondominio: idCond,
+                    tipologiaSegnalazione: $("#txtTipologiaA").val(),
+                    Segnalazione: $("#txtMessaggioA").val(),
+                    _idSegnalazione: parseInt(data[0].idSegnalazione + 1)
+                
+                }
+                alert("idSegnalazionetrovato");
+                let insert = inviaRichiesta("/api/insertSegnalazione", "POST", param);
+                
+                insert.done(function(data){
+                if (data.ris.ok && data.ris.modifiedCount) {
+                    alert("Inserito");
+                    $("#txtTipologiaA").val("");
+                    $("#txtMessaggioA").val("");
+                    alert("insert effet");
+                }                
+                else{
+                    alert("Errore");
+                }
+            });
 
-    let giorno = data.getDate();
-    let mese = data.getMonth() + 1;
-    let anno = data.getFullYear();
-    $("#giorno").text(giorno + "-");
-    $("#mese").text(mese + "-");
-    $("#anno").text(anno);
+            insert.fail(function (jqXHR, test_status, str_error) {
+                    error(jqXHR, test_status, str_error);
+                });
+            });
+            idRichiesta.fail(function (jqXHR, test_status, str_error) {
+                error(jqXHR, test_status, str_error);
+        
+            });  
+        }    
+        else
+        alert("Completa tutti i campi");  
+
+    });
+
     
         
 });

@@ -1,0 +1,9 @@
+[
+	{ 
+		"idSegnalazione": 0,
+		"idCondominio": 1, 
+		"codiceFiscaleUtente": "3",
+		"tipologiaSegnalazione": "Domanda",
+		"Segnalazione": "Pulizia scale secondo piano"
+	}
+]

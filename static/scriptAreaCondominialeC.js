@@ -63,6 +63,7 @@ $(document).ready(function () {
     $("#btnRichiestaA").on("click", function(){
         if($("#txtTipologiaA").val() != "" && $("#txtMessaggioA").val() != "")
         {
+            alert("Parto");
             /**/
             let idRichiesta = inviaRichiesta("/api/lastIdRichiesta", "POST", {});
             idRichiesta.done(function(data){
@@ -75,6 +76,7 @@ $(document).ready(function () {
                     _idRichiesta: parseInt(data[0].idRichiesta + 1)
                 
                 }
+                alert("ci sono");
                 
                 let insert = inviaRichiesta("/api/insertRichiesta", "POST", param);
                 
@@ -116,7 +118,7 @@ $(document).ready(function () {
                     tipologiaRichiesta: $("#txtTipologiaC").val(),
                     Richiesta: $("#txtMessaggioC").val(),
                     tipologiaRichiedente:"C",
-                    _idRichiesta: parseInt(data[0].idRichiesta + 1)
+                    _idRichiesta: parseInt(data[0].idRichiesta+1)
                 
                 }
                 
