@@ -9,10 +9,26 @@ $(document).ready(function () {
     console.log(parCod);
     let name = inviaRichiesta("/api/thisNameC", "POST", parCod);
     
+    let idCondominioC = inviaRichiesta("/api/findidCondominio", "POST", {codiceFiscale : cFiscale});
+    idCondominioC.done(function(data)
+    {
+        let _idCondominio=parseInt(data[0].idCondominio);
+        let proprieta = inviaRichiesta("/api/elencoProprietaC", "POST", {_idCondominio : _idCondominio});
+
+        proprieta.done(function(data){
+            for (let i = 0; i < data.ris.length; i++) {
+                $("#cardDinamiche").append("<div onclick='areaCondominiale(" + data.ris[i].idCondominio + ")' class='col-xl-3 col-md-6 mb-4'><div class='card border-left-success shadow h-100 py-2'><div class='card-body'><div class='row no-gutters align-items-center'><div class='col mr-2'><div class='text-xs font-weight-bold text-success text-uppercase mb-1'>Condominio " + data.ris[i].nomeCondominio + "</div><div class='h5 mb-0 font-weight-bold text-gray-800'>" + data.ris[i].Indirizzo + " " + data.ris[i].numeroCivico + "</div></div><div class='col-auto'><i class='fas fa-clipboard-list fa-2x text-gray-300'></i></div></div></div></div></div>")
+                
+            }
+        });
+        
+    });   
     
 
     name.done(function (data){
         $("#txtNomeUtente").text(data[0].nome);
+        let nome = data[0].nome;
+        sessionStorage.setItem("nome", nome);
     });
     name.fail(function (jqXHR, test_status, str_error) {
         error(jqXHR, test_status, str_error);
@@ -56,13 +72,11 @@ $(document).ready(function () {
                         _idCondominio: parseInt(data[0].idCondominio)
                     
                     }
-                    alert("idCondominio: " + data[0].idCondominio);
                     let idCond=data[0].idCondominio;
                     let update = inviaRichiesta("/api/updateUtente", "POST", param);
                     
                     update.done(function(data){
                     if (data.ris.ok && data.ris.modifiedCount) {
-                        alert("Inserito");
                         $("#txtNomeCondominio").val("");
                         $("#txtCodiceCatastale").val("");
                         $("#txtAccesso").val("");
@@ -101,4 +115,8 @@ $(document).ready(function () {
 
     
 });
+function areaCondominiale(id) {
+    sessionStorage.setItem("idCond", id);
+    window.location.href = "AreaCondominialeC.html";
+}
 

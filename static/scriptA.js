@@ -19,12 +19,11 @@ $(document).ready(function () {
         }
     });
     
-    
-    
-    
 
     name.done(function (data){
         $("#txtNomeUtente").text(data[0].nome);
+        let nome = data[0].nome;
+        sessionStorage.setItem("nome", nome);
         console.log(data);
     });
     name.fail(function (jqXHR, test_status, str_error) {
@@ -70,13 +69,13 @@ $(document).ready(function () {
                 
                 condominio.done(function(data){
                     if (data.ok && data.insertedCount) {
-                    alert("Inserito");
                     $("#txtNomeCondominio").val("");
                     $("#txtIndirizzo").val("");
                     $("#txtNumero").val("");
                     $("#txtCatasto").val("");
                     $("#txtPwdCondominio").val("");
                     $("#txtPwdCondominio2").val("");
+                    window.location.reload();
                 }
                 else{
                     alert("Errore");
@@ -99,7 +98,6 @@ $(document).ready(function () {
 });
 
 function areaCondominiale(id) {
-    alert("condominio: " + id);
     sessionStorage.setItem("idCond", id);
     window.location.href = "AreaCondominialeA.html";
 }

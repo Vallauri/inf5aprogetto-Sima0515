@@ -77,8 +77,16 @@ function controllaToken(req, res, next) {
     req.originalUrl == '/api/thisNameC' || req.originalUrl == '/api/esistenzaCondominio' || req.originalUrl == '/api/updateUtente' || 
     req.originalUrl == '/api/ricercaIdCondominio' || req.originalUrl == '/api/logout' || req.originalUrl == '/api/thisNameCondominio' || 
     req.originalUrl == '/api/lastIdRichiesta' || req.originalUrl == '/api/insertRichiesta' || req.originalUrl == '/api/lastIdSegnalazione' ||
-    req.originalUrl == '/api/insertSegnalazione' || req.originalUrl == '/api/elencoProprieta')
-        {
+    req.originalUrl == '/api/insertSegnalazione' || req.originalUrl == '/api/elencoProprieta' || req.originalUrl == '/api/findidCondominio'|| 
+    req.originalUrl == 'elencoProprietaC' || req.originalUrl == '/api/elencoPagamentiMensili'  || req.originalUrl == '/api/richiediPagamentiMensili'||
+    req.originalUrl == '/api/elencoPagamentiEffettuati' || req.originalUrl == '/api/confermaPagamento' || req.originalUrl == '/api/richiediThisPagamento'||
+    req.originalUrl == '/api/elencoPagamentiAnnuali' || req.originalUrl == '/api/richiediPagamentiAnnuali' || req.originalUrl == '/api/inserisciPagamentiAnnuali'||
+    req.originalUrl == '/api/lastIdPagamentoAnnuali' || req.originalUrl == '/api/richiediThisPagamentoAnnuali' || req.originalUrl == '/api/updatePagamentiAnnuali'||
+    req.originalUrl == '/api/elencoPagamentiMensiliCA' || req.originalUrl == '/api/elencoPagamentiEffettuatiA' || req.originalUrl == '/api/confermaPagamentoA'||
+    req.originalUrl == '/api/elencoMessaggi' ||  req.originalUrl == '/api/elencoSegnalazioni'||  req.originalUrl == '/api/elencoMessaggiA'|| req.originalUrl == '/api/elencoPagamentiEffettuatiM' ||
+    req.originalUrl == '/api/ricercaPagamento'||  req.originalUrl == '/api/elencoPagamentiEffettuatiAA'||  req.originalUrl == '/api/elencoSpeseMensiliCAA' ||  req.originalUrl == '/api/elencoSpeseMensiliC')
+        {           
+              
         next();}
     else {
         let token = readCookie(req);
@@ -219,6 +227,540 @@ app.post('/api/ricercaIdCondominio', function (req, res, next) {
     });
 });
 
+/******************************************************/
+/********************Pagamenti Mensili, amm************************/
+/******************************************************/
+app.post("/api/elencoPagamentiMensili", function (req, res, next) {
+    MONGO_CLIENT.connect(STRING_CONNECT, PARAMETERS, function (err, client) {
+        if (err)
+            error(req, res, err, JSON.stringify(new ERRORS.DB_CONNECTION({})));
+        else {
+            let db = client.db('housing');
+            let collection = db.collection('speseMensili');
+            collection.find({idCondominio:req.body.idCondominio}).sort({ idSpesa: -1 }).toArray(function (err, data) {
+                if (err){
+                    error(req, res, err, JSON.stringify(new ERRORS.QUERY_EXECUTE({})));
+                    console.log("NOn ce la fa");}
+                else{
+                    res.send(JSON.stringify({ "ris": data }));
+                    console.log("Ce l fa");}
+                client.close();
+            });
+        }
+    });
+});
+app.post("/api/richiediPagamentiMensili", function (req, res, next) {
+    MONGO_CLIENT.connect(STRING_CONNECT, PARAMETERS, function (err, client) {
+        if (err)
+            error(req, res, err, JSON.stringify(new ERRORS.DB_CONNECTION({})));
+        else {
+            let db = client.db('housing');
+            let collection = db.collection('speseMensili');
+            collection.find({idCondominio:req.body.idCondominio, anno:req.body.anno, mese:req.body.mese}).toArray(function (err, data) {
+                if (err){
+                    error(req, res, err, JSON.stringify(new ERRORS.QUERY_EXECUTE({})));
+                    console.log("NOn ce la fa");}
+                else{
+                    res.send(JSON.stringify({ "ris": data }));
+                    console.log("Ce l fa");}
+                client.close();
+            });
+        }
+    });
+});
+app.post("/api/inserisciPagamentiMensili", function (req, res, next) {
+    MONGO_CLIENT.connect(STRING_CONNECT, PARAMETERS, function (err, client) {
+        if (err)
+            error(req, res, err, JSON.stringify(new ERRORS.DB_CONNECTION({})));
+        else {
+            let db = client.db('housing');
+            let collection = db.collection('speseMensili');
+            let par = {
+                "Tipologia": req.body.Tipologia,
+                "giorno":req.body.giorno,
+                "mese":req.body.mese,
+                "anno":req.body.anno,
+                "Descrizione":req.body.Descrizione,
+                "idCondominio":req.body.idCondominio,
+                "idSpesa":req.body.idSpesa, 
+                "Importo":req.body.Prezzo
+            };
+
+            collection.insertOne(par, function (err, data) {
+                if (err) {
+                    error(req, res, err, JSON.stringify(new ERRORS.QUERY_EXECUTE({})));
+                    console.log("Errore nella insertOne");
+                }
+                else {
+                    res.send(JSON.stringify(data));
+                    console.log("Ho inserito l'amministratore");
+                }
+                client.close();
+            });
+        }
+    });
+});
+app.post('/api/lastIdPagamentoMensile', function (req, res, next) {
+    MONGO_CLIENT.connect(STRING_CONNECT, PARAMETERS, function (err, client) {
+        if (err)
+            error(req, res, err, JSON.stringify(new ERRORS.DB_CONNECTION({})));
+        else {
+            let db = client.db('housing');
+            let collection = db.collection('speseMensili');
+            collection.find({}).project({ idSpesa: 1 }).sort({ idSpesa: -1 }).limit(1).toArray(function (err, data) {
+                if (err) {
+                    error(req, res, err, JSON.stringify(new ERRORS.QUERY_EXECUTE({})));
+                    console.log("No ID");
+                }
+                else{
+                    res.send(JSON.stringify(data));
+                    console.log("Id trovato");
+                    console.log(data);
+                }
+                client.close();
+            });
+        }
+    });
+});
+app.post('/api/richiediThisPagamento', function (req, res, next) {
+    MONGO_CLIENT.connect(STRING_CONNECT, PARAMETERS, function (err, client) {
+        if (err)
+            error(req, res, err, JSON.stringify(new ERRORS.DB_CONNECTION({})));
+        else {
+            let db = client.db('housing');
+            let collection = db.collection('speseMensili');
+            let query ={idSpesa: req.body.idSpesa}
+            collection.find(query).toArray(function (err, data) {
+                if (err) {
+                    error(req, res, err, JSON.stringify(new ERRORS.QUERY_EXECUTE({})));
+                    console.log("No Non riuscito");
+                }
+                else{
+                    res.send(JSON.stringify(data));
+                    console.log("Pagamento trovato");
+                    console.log(data);
+                }
+                client.close();
+            });
+        }
+    });
+});
+app.post('/api/updatePagamentiMensili', function (req, res, next) {
+    console.log("Entro");
+    MONGO_CLIENT.connect(STRING_CONNECT, PARAMETERS, function (err, client) {
+        if (err)
+            error(req, res, err, JSON.stringify(new ERRORS.DB_CONNECTION({})));
+        else {
+            let db = client.db('housing');
+            let collection = db.collection('speseMensili');
+            let myquery = {idSpesa:req.body.idSpesa};
+            let newValues = {$set: {Tipologia:req.body.Tipologia, Descrizione:req.body.Descrizione, Importo:req.body.Prezzo}};
+
+            collection.updateOne(myquery,newValues, function (err, data) {
+                if (err) {
+                    error(req, res, err, JSON.stringify(new ERRORS.QUERY_EXECUTE({})));
+                }
+                else {
+                    console.log("YA");
+                    res.send(JSON.stringify({ "ris": data }));
+                    
+                }
+                client.close();
+            });
+        }
+    });
+});
+/******************************************************/ 
+/********************Pagamenti Annuali, amm************************/
+/******************************************************/
+app.post("/api/elencoPagamentiAnnuali", function (req, res, next) {
+    MONGO_CLIENT.connect(STRING_CONNECT, PARAMETERS, function (err, client) {
+        if (err)
+            error(req, res, err, JSON.stringify(new ERRORS.DB_CONNECTION({})));
+        else {
+            let db = client.db('housing');
+            let collection = db.collection('speseAnnuali');
+            collection.find({idCondominio:req.body.idCondominio}).toArray(function (err, data) {
+                if (err){
+                    error(req, res, err, JSON.stringify(new ERRORS.QUERY_EXECUTE({})));
+                    console.log("NOn ce la fa");}
+                else{
+                    res.send(JSON.stringify({ "ris": data }));
+                    console.log("Ce l fa");}
+                client.close();
+            });
+        }
+    });
+});
+app.post("/api/richiediPagamentiAnnuali", function (req, res, next) {
+    MONGO_CLIENT.connect(STRING_CONNECT, PARAMETERS, function (err, client) {
+        if (err)
+            error(req, res, err, JSON.stringify(new ERRORS.DB_CONNECTION({})));
+        else {
+            let db = client.db('housing');
+            let collection = db.collection('speseAnnuali');
+            collection.find({idCondominio:req.body.idCondominio, anno:req.body.anno, mese:req.body.mese}).toArray(function (err, data) {
+                if (err){
+                    error(req, res, err, JSON.stringify(new ERRORS.QUERY_EXECUTE({})));
+                    console.log("NOn ce la fa");}
+                else{
+                    res.send(JSON.stringify({ "ris": data }));
+                    console.log("Ce l fa");}
+                client.close();
+            });
+        }
+    });
+});
+app.post("/api/inserisciPagamentiAnnuali", function (req, res, next) {
+    MONGO_CLIENT.connect(STRING_CONNECT, PARAMETERS, function (err, client) {
+        if (err)
+            error(req, res, err, JSON.stringify(new ERRORS.DB_CONNECTION({})));
+        else {
+            let db = client.db('housing');
+            let collection = db.collection('speseAnnuali');
+            let par = {
+                "Tipologia": req.body.Tipologia,
+                "giorno":req.body.giorno,
+                "mese":req.body.mese,
+                "anno":req.body.anno,
+                "Descrizione":req.body.Descrizione,
+                "idCondominio":req.body.idCondominio,
+                "idSpesa":req.body.idSpesa, 
+                "Importo":req.body.Prezzo
+            };
+
+            collection.insertOne(par, function (err, data) {
+                if (err) {
+                    error(req, res, err, JSON.stringify(new ERRORS.QUERY_EXECUTE({})));
+                    console.log("Errore nella insertOne");
+                }
+                else {
+                    res.send(JSON.stringify(data));
+                    console.log("Ho inserito l'amministratore");
+                }
+                client.close();
+            });
+        }
+    });
+});
+app.post('/api/lastIdPagamentoAnnuali', function (req, res, next) {
+    MONGO_CLIENT.connect(STRING_CONNECT, PARAMETERS, function (err, client) {
+        if (err)
+            error(req, res, err, JSON.stringify(new ERRORS.DB_CONNECTION({})));
+        else {
+            let db = client.db('housing');
+            let collection = db.collection('speseAnnuali');
+            collection.find({}).project({ idSpesa: 1 }).sort({ idSpesa: -1 }).limit(1).toArray(function (err, data) {
+                if (err) {
+                    error(req, res, err, JSON.stringify(new ERRORS.QUERY_EXECUTE({})));
+                    console.log("No ID");
+                }
+                else{
+                    res.send(JSON.stringify(data));
+                    console.log("Id trovato");
+                    console.log(data);
+                }
+                client.close();
+            });
+        }
+    });
+});
+app.post('/api/richiediThisPagamentoAnnuali', function (req, res, next) {
+    MONGO_CLIENT.connect(STRING_CONNECT, PARAMETERS, function (err, client) {
+        if (err)
+            error(req, res, err, JSON.stringify(new ERRORS.DB_CONNECTION({})));
+        else {
+            let db = client.db('housing');
+            let collection = db.collection('speseAnnuali');
+            let query ={idSpesa: req.body.idSpesa}
+            collection.find(query).toArray(function (err, data) {
+                if (err) {
+                    error(req, res, err, JSON.stringify(new ERRORS.QUERY_EXECUTE({})));
+                    console.log("No Non riuscito");
+                }
+                else{
+                    res.send(JSON.stringify(data));
+                    console.log("Pagamento trovato");
+                    console.log(data);
+                }
+                client.close();
+            });
+        }
+    });
+});
+app.post('/api/updatePagamentiAnnuali', function (req, res, next) {
+    console.log("Entro");
+    MONGO_CLIENT.connect(STRING_CONNECT, PARAMETERS, function (err, client) {
+        if (err)
+            error(req, res, err, JSON.stringify(new ERRORS.DB_CONNECTION({})));
+        else {
+            let db = client.db('housing');
+            let collection = db.collection('speseAnnuali');
+            let myquery = {idSpesa:req.body.idSpesa};
+            let newValues = {$set: {Tipologia:req.body.Tipologia, Descrizione:req.body.Descrizione, Importo:req.body.Prezzo}};
+
+            collection.updateOne(myquery,newValues, function (err, data) {
+                if (err) {
+                    error(req, res, err, JSON.stringify(new ERRORS.QUERY_EXECUTE({})));
+                }
+                else {
+                    console.log("YA");
+                    res.send(JSON.stringify({ "ris": data }));
+                    
+                }
+                client.close();
+            });
+        }
+    });
+});
+/******************************************************/
+/********************Pagamenti Mensili, cond************************/
+/******************************************************/
+//, idSpesa : {$nin:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]}
+app.post("/api/elencoPagamentiMensiliC", function (req, res, next) {
+    MONGO_CLIENT.connect(STRING_CONNECT, PARAMETERS, function (err, client) {
+        if (err)
+            error(req, res, err, JSON.stringify(new ERRORS.DB_CONNECTION({})));
+        else {
+            let db = client.db('housing');
+            let collection = db.collection('speseMensili');
+        collection.find({idCondominio:req.body.idCondominio, idSpesa : {$nin:req.body.idPagamentiEffettuati}}).sort({ idSpesa: -1 }).toArray(function (err, data) {
+                if (err){
+                    error(req, res, err, JSON.stringify(new ERRORS.QUERY_EXECUTE({})));
+                    console.log("NOn ce la fa");}
+                else{
+                    res.send(JSON.stringify({ "ris": data }));
+                    console.log("Ce l fa");}
+                client.close();
+            });
+        }
+    });
+});
+app.post("/api/elencoSpeseMensiliC", function (req, res, next) {
+    MONGO_CLIENT.connect(STRING_CONNECT, PARAMETERS, function (err, client) {
+        if (err)
+            error(req, res, err, JSON.stringify(new ERRORS.DB_CONNECTION({})));
+        else {
+            let db = client.db('housing');
+            let collection = db.collection('speseMensili');
+        collection.find({idCondominio:req.body.idCondominio, idSpesa : {$in:req.body.idSpese}}).sort({ idSpesa: -1 }).toArray(function (err, data) {
+                if (err){
+                    error(req, res, err, JSON.stringify(new ERRORS.QUERY_EXECUTE({})));
+                    console.log("NOn ce la fa");}
+                else{
+                    res.send(JSON.stringify({ "ris": data }));
+                    console.log("Ce l fa");}
+                client.close();
+            });
+        }
+    });
+});
+app.post("/api/elencoSpeseMensiliCAA", function (req, res, next) {
+    MONGO_CLIENT.connect(STRING_CONNECT, PARAMETERS, function (err, client) {
+        if (err)
+            error(req, res, err, JSON.stringify(new ERRORS.DB_CONNECTION({})));
+        else {
+            let db = client.db('housing');
+            let collection = db.collection('speseAnnuali');
+        collection.find({idCondominio:req.body.idCondominio, idSpesa : {$in:req.body.idSpese}}).sort({ idSpesa: -1 }).toArray(function (err, data) {
+                if (err){
+                    error(req, res, err, JSON.stringify(new ERRORS.QUERY_EXECUTE({})));
+                    console.log("NOn ce la fa");}
+                else{
+                    res.send(JSON.stringify({ "ris": data }));
+                    console.log("Ce l fa");}
+                client.close();
+            });
+        }
+    });
+});
+app.post("/api/elencoPagamentiEffettuati", function (req, res, next) {
+    MONGO_CLIENT.connect(STRING_CONNECT, PARAMETERS, function (err, client) {
+        if (err)
+            error(req, res, err, JSON.stringify(new ERRORS.DB_CONNECTION({})));
+        else {
+            let db = client.db('housing');
+            let collection = db.collection('pagamentoUtenti');
+            collection.find({codiceFiscale:req.body.codiceFiscale}).toArray(function (err, data) {
+                if (err){
+                    error(req, res, err, JSON.stringify(new ERRORS.QUERY_EXECUTE({})));
+                    console.log("NOn ce la fa");}
+                else{
+                    res.send(JSON.stringify({ "ris": data }));
+                    console.log("Ce l fa");}
+                client.close();
+            });
+        }
+    });
+});
+app.post("/api/elencoPagamentiEffettuatiAA", function (req, res, next) {
+    MONGO_CLIENT.connect(STRING_CONNECT, PARAMETERS, function (err, client) {
+        if (err)
+            error(req, res, err, JSON.stringify(new ERRORS.DB_CONNECTION({})));
+        else {
+            let db = client.db('housing');
+            let collection = db.collection('pagamentoUtentiA');
+            collection.find({codiceFiscale:req.body.codiceFiscale}).toArray(function (err, data) {
+                if (err){
+                    error(req, res, err, JSON.stringify(new ERRORS.QUERY_EXECUTE({})));
+                    console.log("NOn ce la fa");}
+                else{
+                    res.send(JSON.stringify({ "ris": data }));
+                    console.log("Ce l fa");}
+                client.close();
+            });
+        }
+    });
+});
+app.post("/api/confermaPagamento", function (req, res, next) {
+    console.log("Entro in inserimento");
+    MONGO_CLIENT.connect(STRING_CONNECT, PARAMETERS, function (err, client) {
+        if (err)
+            error(req, res, err, JSON.stringify(new ERRORS.DB_CONNECTION({})));
+        else {
+            let db = client.db('housing');
+            let collection = db.collection('pagamentoUtenti');
+            let par = {                
+                "idSpesa": parseInt(req.body.idSpesa),
+                "codiceFiscale":req.body.codiceFiscale,
+                "Tipologia": req.body.Tipologia,
+                "Descrizione":req.body.Descrizione,
+                "giorno":req.body.giorno,
+                "mese":req.body.mese,
+                "anno":req.body.anno
+            };
+
+            collection.insertOne(par, function (err, data) {
+                if (err) {
+                    error(req, res, err, JSON.stringify(new ERRORS.QUERY_EXECUTE({})));
+                    console.log("Errore nella insertOne");
+                }
+                else {
+                    res.send(JSON.stringify(data));
+                    console.log("Ho inserito");
+                }
+                client.close();
+            });
+        }
+    });
+});
+
+app.post("/api/ricercaPagamento", function (req, res, next) {
+    MONGO_CLIENT.connect(STRING_CONNECT, PARAMETERS, function (err, client) {
+        if (err)
+            error(req, res, err, JSON.stringify(new ERRORS.DB_CONNECTION({})));
+        else {
+            let db = client.db('housing');
+            let collection = db.collection('pagamentoUtenti');
+            collection.find({idSpesa:req.body.idSpesa}).toArray(function (err, data) {
+                if (err){
+                    error(req, res, err, JSON.stringify(new ERRORS.QUERY_EXECUTE({})));
+                    console.log("NOn ce la fa");}
+                else{
+                    res.send(JSON.stringify({ "ris": data }));
+                    console.log("Ce l fa");}
+                client.close();
+            });
+        }
+    });
+});
+
+app.post("/api/elencoPagamentiEffettuatiM", function (req, res, next) {
+    MONGO_CLIENT.connect(STRING_CONNECT, PARAMETERS, function (err, client) {
+        if (err)
+            error(req, res, err, JSON.stringify(new ERRORS.DB_CONNECTION({})));
+        else {
+            let db = client.db('housing');
+            let collection = db.collection('pagamentoUtenti');
+            collection.find({codiceFiscale:req.body.codiceFiscale}).toArray(function (err, data) {
+                if (err){
+                    error(req, res, err, JSON.stringify(new ERRORS.QUERY_EXECUTE({})));
+                    console.log("NOn ce la fa");}
+                else{
+                    res.send(JSON.stringify({ "ris": data }));
+                    console.log("Ce l fa");}
+                client.close();
+            });
+        }
+    });
+});
+
+/******************************************************/
+/********************Pagamenti Annuali, cond************************/
+/******************************************************/
+app.post("/api/elencoPagamentiMensiliCA", function (req, res, next) {
+    MONGO_CLIENT.connect(STRING_CONNECT, PARAMETERS, function (err, client) {
+        if (err)
+            error(req, res, err, JSON.stringify(new ERRORS.DB_CONNECTION({})));
+        else {
+            let db = client.db('housing');
+            let collection = db.collection('speseAnnuali');
+        collection.find({idCondominio:req.body.idCondominio, idSpesa : {$nin:req.body.idPagamentiEffettuati}}).sort({ idSpesa: -1 }).toArray(function (err, data) {
+                if (err){
+                    error(req, res, err, JSON.stringify(new ERRORS.QUERY_EXECUTE({})));
+                    console.log("NOn ce la fa");}
+                else{
+                    res.send(JSON.stringify({ "ris": data }));
+                    console.log("Ce l fa");}
+                client.close();
+            });
+        }
+    });
+});
+app.post("/api/elencoPagamentiEffettuatiA", function (req, res, next) {
+    MONGO_CLIENT.connect(STRING_CONNECT, PARAMETERS, function (err, client) {
+        if (err)
+            error(req, res, err, JSON.stringify(new ERRORS.DB_CONNECTION({})));
+        else {
+            let db = client.db('housing');
+            let collection = db.collection('pagamentoUtentiA');
+            collection.find({codiceFiscale:req.body.codiceFiscale}).toArray(function (err, data) {
+                if (err){
+                    error(req, res, err, JSON.stringify(new ERRORS.QUERY_EXECUTE({})));
+                    console.log("NOn ce la fa");}
+                else{
+                    res.send(JSON.stringify({ "ris": data }));
+                    console.log("Ce l fa");}
+                client.close();
+            });
+        }
+    });
+});
+app.post("/api/confermaPagamentoA", function (req, res, next) {
+    console.log("Entro in inserimento");
+    MONGO_CLIENT.connect(STRING_CONNECT, PARAMETERS, function (err, client) {
+        if (err)
+            error(req, res, err, JSON.stringify(new ERRORS.DB_CONNECTION({})));
+        else {
+            let db = client.db('housing');
+            let collection = db.collection('pagamentoUtentiA');
+            let par = {                
+                "idSpesa": parseInt(req.body.idSpesa),
+                "codiceFiscale":req.body.codiceFiscale,
+                "Tipologia": req.body.Tipologia,
+                "Descrizione":req.body.Descrizione,
+                "giorno":req.body.giorno,
+                "mese":req.body.mese,
+                "anno":req.body.anno
+            };
+
+            collection.insertOne(par, function (err, data) {
+                if (err) {
+                    error(req, res, err, JSON.stringify(new ERRORS.QUERY_EXECUTE({})));
+                    console.log("Errore nella insertOne");
+                }
+                else {
+                    res.send(JSON.stringify(data));
+                    console.log("Ho inserito");
+                }
+                client.close();
+            });
+        }
+    });
+});
+
+
+
 app.post("/api/elencoProprieta", function (req, res, next) {
     MONGO_CLIENT.connect(STRING_CONNECT, PARAMETERS, function (err, client) {
         if (err)
@@ -234,6 +776,114 @@ app.post("/api/elencoProprieta", function (req, res, next) {
                 else{
                     res.send(JSON.stringify({ "ris": data }));
                     console.log("Ce l fa");}
+                client.close();
+            });
+        }
+    });
+});
+
+app.post("/api/findidCondominio", function (req, res, next) {
+    MONGO_CLIENT.connect(STRING_CONNECT, PARAMETERS, function (err, client) {
+        if (err)
+            error(req, res, err, JSON.stringify(new ERRORS.DB_CONNECTION({})));
+        else {
+            let db = client.db('housing');
+            let collection = db.collection('condomini');
+            let query ={codiceFiscale: req.body.codiceFiscale}
+            console.log(req.body.codiceFiscale);
+            collection.find(query).toArray(function (err, data) {
+                if (err) {
+                    error(req, res, err, JSON.stringify(new ERRORS.QUERY_EXECUTE({})));
+                    console.log("No Non riuscito");
+                }
+                else{
+                    res.send(JSON.stringify(data));
+                    console.log("id trovato");
+                    console.log(data);
+                }
+                client.close();
+            });
+        }
+    });
+});
+
+app.post("/api/elencoProprietaC", function (req, res, next) {
+    MONGO_CLIENT.connect(STRING_CONNECT, PARAMETERS, function (err, client) {
+        if (err)
+            error(req, res, err, JSON.stringify(new ERRORS.DB_CONNECTION({})));
+        else {
+            let db = client.db('housing');
+            let collection = db.collection('condominio');
+			// nella find metto il valore del reparto passato dal client
+            collection.find({idCondominio:req.body._idCondominio}).toArray(function (err, data) {
+                if (err){
+                    error(req, res, err, JSON.stringify(new ERRORS.QUERY_EXECUTE({})));
+                }
+                else{
+                    res.send(JSON.stringify({ "ris": data }));
+                    }
+                client.close();
+            });
+        }
+    });
+});
+
+app.post("/api/elencoMessaggi", function (req, res, next) {
+    MONGO_CLIENT.connect(STRING_CONNECT, PARAMETERS, function (err, client) {
+        if (err)
+            error(req, res, err, JSON.stringify(new ERRORS.DB_CONNECTION({})));
+        else {
+            let db = client.db('housing');
+            let collection = db.collection('richiesteC');
+			// nella find metto il valore del reparto passato dal client
+            collection.find({idCondominio:req.body.idCondominio, tipologiaRicevente:"C"}).sort({ idRichiesta: -1 }).toArray(function (err, data) {
+                if (err){
+                    error(req, res, err, JSON.stringify(new ERRORS.QUERY_EXECUTE({})));
+                }
+                else{
+                    res.send(JSON.stringify({ "ris": data }));
+                    }
+                client.close();
+            });
+        }
+    });
+});
+app.post("/api/elencoMessaggiA", function (req, res, next) {
+    MONGO_CLIENT.connect(STRING_CONNECT, PARAMETERS, function (err, client) {
+        if (err)
+            error(req, res, err, JSON.stringify(new ERRORS.DB_CONNECTION({})));
+        else {
+            let db = client.db('housing');
+            let collection = db.collection('richiesteC');
+			// nella find metto il valore del reparto passato dal client
+            collection.find({idCondominio:req.body.idCondominio, tipologiaRicevente:"A"}).sort({ idRichiesta: -1 }).toArray(function (err, data) {
+                if (err){
+                    error(req, res, err, JSON.stringify(new ERRORS.QUERY_EXECUTE({})));
+                }
+                else{
+                    res.send(JSON.stringify({ "ris": data }));
+                    }
+                client.close();
+            });
+        }
+    });
+});
+
+app.post("/api/elencoSegnalazioni", function (req, res, next) {
+    MONGO_CLIENT.connect(STRING_CONNECT, PARAMETERS, function (err, client) {
+        if (err)
+            error(req, res, err, JSON.stringify(new ERRORS.DB_CONNECTION({})));
+        else {
+            let db = client.db('housing');
+            let collection = db.collection('richiesteA');
+			// nella find metto il valore del reparto passato dal client
+            collection.find({idCondominio:req.body.idCondominio}).sort({ idSegnalazione: -1 }).toArray(function (err, data) {
+                if (err){
+                    error(req, res, err, JSON.stringify(new ERRORS.QUERY_EXECUTE({})));
+                }
+                else{
+                    res.send(JSON.stringify({ "ris": data }));
+                    }
                 client.close();
             });
         }
@@ -488,6 +1138,7 @@ app.post('/api/insertRichiesta', function (req, res, next) {
             let collection = db.collection('richiesteC');
             let par = {
                 "idRichiesta": req.body._idRichiesta,
+                "nome": req.body.nome,
                 "idCondominio":req.body.idCondominio,
                 "codiceFiscaleUtente":req.body.codiceFiscale,
                 "tipologiaRichiesta":req.body.tipologiaRichiesta,
@@ -520,6 +1171,7 @@ app.post('/api/insertSegnalazione', function (req, res, next) {
             let collection = db.collection('richiesteA');
             let par = {
                 "idSegnalazione": req.body._idSegnalazione,
+                //"nome": req.body.nome,
                 "idCondominio":req.body.idCondominio,
                 "codiceFiscaleUtente":req.body.codiceFiscale,
                 "tipologiaSegnalazione":req.body.tipologiaSegnalazione,

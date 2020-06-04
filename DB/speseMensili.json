@@ -1,13 +1,166 @@
 [
 	{ 
 		"idSpesa": 0,
-		"idCondominio": 0, 
+		"idCondominio": 14,
 		"Tipologia": "Manutenzione",
 		"Descrizione": "Ristrutturazione Facciata",
-		"Importo": 15,
+		"Importo": "15",
 		"giorno": "15",
-		"mese":"02",
-		"Anno":"2020"
+		"mese":"3",
+		"anno":"2019"
+		
+	},
+	{ 
+		"idSpesa": 1,
+		"idCondominio": 14,
+		"Tipologia": "Manutenzione",
+		"Descrizione": "Ristrutturazione Facciata",
+		"Importo": "15",
+		"giorno": "15",
+		"mese":"2",
+		"anno":"2020"
+		
+	},
+	{ 
+		"idSpesa": 2,
+		"idCondominio": 14,
+		"Tipologia": "Manutenzione",
+		"Descrizione": "Ristrutturazione Facciata",
+		"Importo": "15",
+		"giorno": "15",
+		"mese":"2",
+		"anno":"2020"
+		
+	},
+	{ 
+		"idSpesa": 3,
+		"idCondominio": 14,
+		"Tipologia": "Manutenzione",
+		"Descrizione": "Ristrutturazione Facciata",
+		"Importo": "15",
+		"giorno": "15",
+		"mese":"2",
+		"anno":"2020"
+		
+	},
+	{ 
+		"idSpesa": 4,
+		"idCondominio": 14,
+		"Tipologia": "Manutenzione",
+		"Descrizione": "Ristrutturazione Facciata",
+		"Importo": "15",
+		"giorno": "15",
+		"mese":"2",
+		"anno":"2020"
+		
+	},
+	{ 
+		"idSpesa": 5,
+		"idCondominio": 14,
+		"Tipologia": "Manutenzione",
+		"Descrizione": "Ristrutturazione Facciata",
+		"Importo": "15",
+		"giorno": "15",
+		"mese":"2",
+		"anno":"2020"
+		
+	},
+	{ 
+		"idSpesa": 6,
+		"idCondominio": 14,
+		"Tipologia": "Manutenzione",
+		"Descrizione": "Ristrutturazione Facciata",
+		"Importo": "15",
+		"giorno": "15",
+		"mese":"2",
+		"anno":"2020"
+		
+	},
+	{ 
+		"idSpesa": 7,
+		"idCondominio": 14,
+		"Tipologia": "Manutenzione",
+		"Descrizione": "Ristrutturazione Facciata",
+		"Importo": "15",
+		"giorno": "15",
+		"mese":"2",
+		"anno":"2020"
+		
+	},{ 
+		"idSpesa": 8,
+		"idCondominio": 14,
+		"Tipologia": "Manutenzione",
+		"Descrizione": "Ristrutturazione Facciata",
+		"Importo": "15",
+		"giorno": "15",
+		"mese":"2",
+		"anno":"2020"
+		
+	},
+	{ 
+		"idSpesa": 9,
+		"idCondominio": 14,
+		"Tipologia": "Manutenzione",
+		"Descrizione": "Ristrutturazione Facciata",
+		"Importo": "15",
+		"giorno": "15",
+		"mese":"2",
+		"anno":"2020"
+		
+	},
+	{ 
+		"idSpesa": 10,
+		"idCondominio": 14,
+		"Tipologia": "Manutenzione",
+		"Descrizione": "Ristrutturazione Facciata",
+		"Importo": "15",
+		"giorno": "15",
+		"mese":"2",
+		"anno":"2020"
+		
+	},
+	{ 
+		"idSpesa": 11,
+		"idCondominio": 14,
+		"Tipologia": "Manutenzione",
+		"Descrizione": "Ristrutturazione Facciata",
+		"Importo": "15",
+		"giorno": "15",
+		"mese":"2",
+		"anno":"2020"
+		
+	},
+	{ 
+		"idSpesa": 12,
+		"idCondominio": 14,
+		"Tipologia": "Manutenzione",
+		"Descrizione": "Ristrutturazione Facciata",
+		"Importo": "15",
+		"giorno": "15",
+		"mese":"2",
+		"anno":"2020"
+		
+	},
+	{ 
+		"idSpesa": 13,
+		"idCondominio": 14,
+		"Tipologia": "Manutenzione",
+		"Descrizione": "Ristrutturazione Facciata",
+		"Importo": "15",
+		"giorno": "15",
+		"mese":"2",
+		"anno":"2020"
+		
+	},
+	{ 
+		"idSpesa": 14,
+		"idCondominio": 14,
+		"Tipologia": "Manutenzione",
+		"Descrizione": "Ristrutturazione Facciata",
+		"Importo": "15",
+		"giorno": "15",
+		"mese":"2",
+		"anno":"2020"
 		
 	}
 ]
