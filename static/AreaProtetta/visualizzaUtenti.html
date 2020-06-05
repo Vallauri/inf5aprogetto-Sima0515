@@ -39,7 +39,7 @@
       <hr class="sidebar-divider my-0">
 
       <!-- Nav Item - Dashboard -->
-      <li class="nav-item active">
+      <li class="nav-item">
         <a class="nav-link" href="index.html">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Dashboard</span></a>
@@ -119,7 +119,7 @@
       </li>
 <hr class="sidebar-divider">
 <div class="sidebar-heading">Visualizzazione</div>
-<li class="nav-item">
+<li class="nav-item active">
         <a class="nav-link" href="visualizzaUtenti.html">
           <i class="fas fa-fw fa-chart-area"></i>
           <span>Utenti</span></a>
@@ -136,8 +136,7 @@
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
       </div>
 
-    </ul>
-    <!-- Content Wrapper -->
+    </ul><!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
 
       <!-- Main Content -->
@@ -240,7 +239,7 @@
             <!-- Nav Item - User Information -->
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span id="txtNomeUtente" class="mr-2 d-none d-lg-inline text-gray-600 small"></span>
+                <span id="txtNomeUtente" class="mr-2 d-none d-lg-inline text-gray-600 small">1</span>
                 <img class="img-profile rounded-circle" src="img/avataaars.svg">
               </a>
               <!-- Dropdown - User Information -->
@@ -248,7 +247,6 @@
                 <a class="dropdown-item" href="#">
                   <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                   Profile
-                </a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                   <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -267,9 +265,8 @@
 
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800" id="txtNomeCondominio">Condominio </h1>
             
-            <h1 class="h3 mb-0 text-gray-800" id="txtNomeCondominio">Condominio <label id="txtCondominio"></label><input class="form-control" id="txtCondominio" type="text"></h1>
-            <button id="btnModificaNome" class="btn btn-success">Modifica</button>
           </div>
 
           <!-- Content Row -->
@@ -287,7 +284,7 @@
 
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h5 mb-0 text-gray-800">Pagamenti mensili</h1>
+            <h1 class="h5 mb-0 text-gray-800">Pagamenti Annuali</h1>
             
           </div>
 		<div class="card shadow mb-4">
@@ -295,32 +292,13 @@
 				<div class="card-body">
 				<div class="table-responsive">
                 <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
-				<div class="row"><div class="col-sm-12 col-md-3">
-				<div class="dataTables_length" id="dataTable_length">
-        <label>Mese <select id="cmbMese" class="custom-select custom-select-sm form-control form-control-sm">
-          <option value="1">Gennaio</option>
-          <option value="2">Febbraio</option>
-          <option value="3">Marzo</option>
-          <option value="4">Aprile</option>
-          <option value="5">Maggio</option>
-          <option value="6">Giugno</option>
-          <option value="7">Luglio</option>
-          <option value="8">Agosto</option>
-          <option value="9">Settetmbre</option>
-          <option value="10">Ottobre</option>
-          <option value="11">Novembre</option>
-          <option value="12">Dicembre</option></select></label></div></div>
-          <div class="col-sm-12 col-md-3"><div id="dataTable_filter" class="dataTables_filter"><label>Anno:<input type="text" id="txtanno" class="form-control form-control-sm" placeholder="" aria-controls="dataTable"></label></div></div>
-        
-          <label>Ricerca<div class="col-sm-12 col-md-3"><button id="btnRicercaMensile" class="btn btn-success btn-circle"><i class="fas fa-check"></i></button></div></label></div>
+				
 
-          <div id="InserimentoPagamentiMensili">
-            <h1 class="h5 mb-0 text-gray-800">Inserimento pagamenti</h1>
-            <div class="col-sm-12 col-md-3"><label>Tipologia:<input type="text" id="txtTipologiamensile" class="form-control form-control-sm" placeholder="" aria-controls="dataTable"></label><label>Prezzo:<input type="text" id="txtPrezzoMensile" class="form-control form-control-sm" placeholder="" aria-controls="dataTable"></label></div>
-            <div class="col-sm-12 col-md-6"><label>Descrizione:<textarea style="width: 500px;" id="txtDescrizioneMensile" class="form-control form-control-sm" placeholder="" aria-controls="dataTable"></textarea></label></div>
-            <button id="btnInserisciMensile" class="btn btn-success"><i class="fas fa-check">Inserisci</i></button><button id="btnModificaMensile" class="btn btn-success"><i class="fas fa-check">Modifica</i></button>
+          <div id="insUtenti">
+            <h1 class="h5 mb-0 text-gray-800">Visualizza Utenti</h1>
+            
           </div>
-        <table class="table table-bordered dataTable" id="tabPagamentiMensili" style="width:'100%'; background-color:white"></table>
+        <table class="table table-bordered dataTable" id="tabVisUtenti" style="width:'100%'; background-color:white"></table>
 				</div>
 			</div>
 			
@@ -463,7 +441,7 @@
 
   <!-- Custom scripts for all pages-->
   <script src="js/sb-admin-2.min.js"></script>
-  
+
   <script type="text/javascript" src="../jquery.js"></script>
   <script type="text/javascript" src="../libreria.js"></script>
   <script type="text/javascript" src="../scriptAreaCondominialeA.js"></script>
@@ -499,5 +477,4 @@
 
 </div></div>
 
-</body>
-</html>
+</body></html>

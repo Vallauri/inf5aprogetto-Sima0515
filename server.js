@@ -84,7 +84,8 @@ function controllaToken(req, res, next) {
     req.originalUrl == '/api/lastIdPagamentoAnnuali' || req.originalUrl == '/api/richiediThisPagamentoAnnuali' || req.originalUrl == '/api/updatePagamentiAnnuali'||
     req.originalUrl == '/api/elencoPagamentiMensiliCA' || req.originalUrl == '/api/elencoPagamentiEffettuatiA' || req.originalUrl == '/api/confermaPagamentoA'||
     req.originalUrl == '/api/elencoMessaggi' ||  req.originalUrl == '/api/elencoSegnalazioni'||  req.originalUrl == '/api/elencoMessaggiA'|| req.originalUrl == '/api/elencoPagamentiEffettuatiM' ||
-    req.originalUrl == '/api/ricercaPagamento'||  req.originalUrl == '/api/elencoPagamentiEffettuatiAA'||  req.originalUrl == '/api/elencoSpeseMensiliCAA' ||  req.originalUrl == '/api/elencoSpeseMensiliC')
+    req.originalUrl == '/api/ricercaPagamento'||  req.originalUrl == '/api/elencoPagamentiEffettuatiAA'||  req.originalUrl == '/api/elencoSpeseMensiliCAA' ||  req.originalUrl == '/api/elencoSpeseMensiliC' ||
+    req.originalUrl == '/api/VisUtenti' || req.originalUrl == '/api/rimuoviThisCondomino')
         {           
               
         next();}
@@ -126,6 +127,53 @@ function readCookie(req) {
 }
 
 /* ************************************************************ */
+
+app.post('/api/rimuoviThisCondomino', function (req, res, next) {
+    console.log("Entro");
+    MONGO_CLIENT.connect(STRING_CONNECT, PARAMETERS, function (err, client) {
+        if (err)
+            error(req, res, err, JSON.stringify(new ERRORS.DB_CONNECTION({})));
+        else {
+            let db = client.db('housing');
+            let collection = db.collection('condomini');
+            let myquery = {codiceFiscale:req.body.codiceFiscale};
+            let newValues = {$set: {idCondominio:null}};
+
+            collection.updateOne(myquery,newValues, function (err, data) {
+                if (err) {
+                    error(req, res, err, JSON.stringify(new ERRORS.QUERY_EXECUTE({})));
+                }
+                else {
+                    console.log("YA");
+                    res.send(JSON.stringify({ "ris": data }));
+                    
+                }
+                client.close();
+            });
+        }
+    });
+});
+
+app.post("/api/VisUtenti", function (req, res, next) {
+    MONGO_CLIENT.connect(STRING_CONNECT, PARAMETERS, function (err, client) {
+        if (err)
+            error(req, res, err, JSON.stringify(new ERRORS.DB_CONNECTION({})));
+        else {
+            let db = client.db('housing');
+            let collection = db.collection('condomini');
+            collection.find({idCondominio:req.body.idCondominio}).toArray(function (err, data) {
+                if (err){
+                    error(req, res, err, JSON.stringify(new ERRORS.QUERY_EXECUTE({})));
+                    console.log("NOn ce la fa");}
+                else{
+                    res.send(JSON.stringify({ "ris": data }));
+                    console.log("Ce l fa");}
+                client.close();
+            });
+        }
+    });
+});
+
 
 app.post('/api/thisName', function (req, res, next) {
     MONGO_CLIENT.connect(STRING_CONNECT, PARAMETERS, function (err, client) {

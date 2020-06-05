@@ -60,8 +60,8 @@
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar" style="">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Pagamenti Mensili</h6>
-            <a class="collapse-item" href="inserimentoPagamentiMensili.html">Inserisci</a>
-            <a class="collapse-item" href="cards.html">Visualizza</a>
+            <a class="collapse-item" href="AreaCondominialeA.html">Inserisci e Visualizza</a>
+            
           </div>
         </div>
       </li>
@@ -75,10 +75,10 @@
         <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar" style="">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Pagamenti annuali</h6>
-            <a class="collapse-item" href="inserimentoPagamentiAnnuali.html">Inserisci</a>
-            <a class="collapse-item" href="utilities-border.html">Visualizza</a>
+            <a class="collapse-item" href="inserimentoPagamentiAnnuali.html">Inserisci e Visualizza</a>
             
-            <a class="collapse-item" href="utilities-other.html">Other</a>
+            
+            
           </div>
         </div>
       </li>
@@ -113,17 +113,20 @@
 
       <!-- Nav Item - Charts -->
       <li class="nav-item">
-        <a class="nav-link" href="charts.html">
+        <a class="nav-link" href="VisualizzaMessaggiCondominiA.html">
           <i class="fas fa-fw fa-chart-area"></i>
           <span>Notifiche</span></a>
       </li>
+<hr class="sidebar-divider">
+<div class="sidebar-heading">Visualizzazione</div>
+<li class="nav-item">
+        <a class="nav-link" href="visualizzaUtenti.html">
+          <i class="fas fa-fw fa-chart-area"></i>
+          <span>Utenti</span></a>
+      </li>
 
       <!-- Nav Item - Tables -->
-      <li class="nav-item">
-        <a class="nav-link" href="tables.html">
-          <i class="fas fa-fw fa-table"></i>
-          <span>Tables</span></a>
-      </li>
+      
 
       <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block">
@@ -134,7 +137,6 @@
       </div>
 
     </ul>
-
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
 
@@ -297,14 +299,6 @@
                   <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                   Profile
                 </a>
-                <a class="dropdown-item" href="#">
-                  <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Settings
-                </a>
-                <a class="dropdown-item" href="#">
-                  <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Activity Log
-                </a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                   <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -410,15 +404,14 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Sei sicuro di voler uscire?</h5>
           <button class="close" type="button" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">×</span>
           </button>
         </div>
-        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
         <div class="modal-footer">
-          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <button class="btn btn-primary" id="btnLogout">Logout</button>
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">NO</button>
+          <button class="btn btn-primary" id="btnLogout">Sì</button>
         </div>
       </div>
     </div>
@@ -509,13 +502,6 @@
 
   <!-- Custom scripts for all pages-->
   <script src="js/sb-admin-2.min.js"></script>
-
-  <!-- Page level plugins -->
-  <script src="vendor/chart.js/Chart.min.js"></script>
-
-  <!-- Page level custom scripts -->
-  <script src="js/demo/chart-area-demo.js"></script>
-  <script src="js/demo/chart-pie-demo.js"></script>
 
   <script type="text/javascript" src="../jquery.js"></script>
   <script type="text/javascript" src="../libreria.js"></script>

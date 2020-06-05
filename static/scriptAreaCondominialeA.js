@@ -28,7 +28,6 @@ $(document).ready(function () {
 
     name.done(function (data){
         $("#txtNomeUtente").text(data[0].nome);
-        
     });
     name.fail(function (jqXHR, test_status, str_error) {
         error(jqXHR, test_status, str_error);
@@ -58,6 +57,20 @@ $(document).ready(function () {
     });
 
     pagamentiAnnuali.fail(function (jqXHR, test_status, str_error) {
+	    error(jqXHR, test_status, str_error); // funzione di errore
+    });
+
+    
+    let VisUtenti  = inviaRichiesta("/api/VisUtenti", "POST", {idCondominio : parseInt(idCond)});
+
+    VisUtenti.done(function (data) {
+        console.log(data.ris);
+        
+        aggiornaTabellaU(data.ris, "#tabVisUtenti");        
+	    
+    });
+
+    VisUtenti.fail(function (jqXHR, test_status, str_error) {
 	    error(jqXHR, test_status, str_error); // funzione di errore
     });
 
@@ -547,6 +560,74 @@ function modPagamenti1(id) {
         error(jqXHR, test_status, str_error);
     });
 }
+
+function aggiornaTabellaU(dati, idTab) {
+    let t = $(idTab);
+    t.empty();
+    let the = $("<thead class=''></thead>");
+    let head = ["Nome", "Cognome", "Telefono"];
+
+    let tr = $("<tr></tr>");
+    head.forEach(function (testo) {
+        let th = $("<th></th>");
+        th.html(testo);
+        tr.append(th);
+    })
+    the.append(tr);
+    t.append(the);
+    let tb = $("<tbody></tbody>");
+
+    for(let i = 0; i < dati.length; i++){
+        let tr = $("<tr></tr>");
+        let data, Tipologia, Descrizione, Prezzo, idCondominio;
+        codiceFiscale = dati[i].codiceFiscale;
+        //cognomePaz = dati[i].cognomePaziente;
+        Utente = dati[i];
+        console.log(Utente);
+        
+        
+        /*td=$("<td></td>");
+        td.html(visita["telefono"]);
+        tr.append(td);*/
+        let td=$("<td></td>");
+        td.html(Utente["nome"]);
+        tr.append(td);
+
+        td = $("<td></td>");
+        td.html(Utente["cognome"]);
+        tr.append(td);
+
+        td = $("<td></td>");
+        td.html(Utente["telefono"]);
+        tr.append(td);
+        
+        td = $("<td></td>");
+        td.append("<button class='btn btn-danger btn-circle' onclick='modPagamentiU(" + '"' + codiceFiscale + '"' +");' data-toggle='modal' data-target='#modVisita'><i class='fas fa-trash'></i></button>");
+        //td.append("<button class='btn-circle' onclick='elimPagamenti(" + idSpesa + ");'><i class='fas fa-info-circle'></i></button>");
+        tr.append(td);
+        
+        tr.attr("id", "tr_" + codiceFiscale);
+
+        tb.append(tr);
+    }
+    t.append(tb);
+}
+
+function modPagamentiU(id) {
+    // $("#modVisita").modal("show");
+    
+    let rimuovi = inviaRichiesta("/api/rimuoviThisCondomino", "POST", {codiceFiscale : id});
+
+    rimuovi.done(function (data) {
+        window.location.reload();
+        
+    });
+
+    rimuovi.fail(function (jqXHR, test_status, str_error) {
+        error(jqXHR, test_status, str_error);
+    });
+}
+
 function aggiornaTabella2(dati, idTab) {
     let t = $(idTab);
     t.empty();
@@ -649,3 +730,12 @@ function aggiornaTabella3(dati, idTab) {
     }
     t.append(tb);
 }
+
+
+$("#btnModificaNome").on("click", function(){
+    $("#txtNomeCondominio").text("");
+    let param = {
+        idCondominio: parseInt(idCond)
+    }
+    
+});
